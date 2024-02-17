@@ -1,0 +1,5 @@
+def SOT():
+    df = dfFromURL("https://afootballreport.com/predictions/shots-on-off-target",2)
+    html_table = df.to_html()
+    
+    email_auto(html_table, "Fulltime")
