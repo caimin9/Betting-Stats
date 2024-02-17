@@ -1,0 +1,16 @@
+def Facts(one):
+    #0 for unders
+    if one == 0:
+        my_df = dfFromURL("https://footballzz.co.uk/over-under-goals-football-predictions-and-statistics",2)
+    else:
+        #1 for overs
+        my_df = dfFromURL("https://footballzz.co.uk/over-under-goals-football-predictions-and-statistics",1)
+
+
+    
+    #Drop over and under % columns since confidence column covers that anyway
+    df = my_df.drop(['Unnamed: 1', 'Unnamed: 5'], axis=1)
+    #Just converts the dataframe to html to make it easier to read in email
+    html_table = df.to_html()
+    
+    email_auto(html_table, "Overs Facts")
