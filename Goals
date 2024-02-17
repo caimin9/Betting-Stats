@@ -1,0 +1,31 @@
+def overs(num):
+    
+    # If we want the overs for 2.5 goals
+    if num == 2.5:
+        df = dfFromURL("https://talkfootball.co.uk/predictions/match-goals-over-2.5/",2)
+        df = df.drop(['Over 2.5 (%)', 'Under 2.5 (%)'], axis=1)
+        
+        #converts confidence column values to floats
+        df['Confidence'] = df['Confidence'].str.replace('%', '').astype(float)
+
+        #Filter the rows where the confidence level is above 60
+        df_filtered = df[df['Confidence'] > 60]
+     
+    #if we want the overs for 1.5 goals
+    if num == 1.5:
+        df = dfFromURL("https://talkfootball.co.uk/predictions/match-goals-over-1.5/",2)
+        df = df.drop(['Over 1.5 (%)', 'Under 1.5 (%)'], axis=1)
+        df['Confidence'] = df['Confidence'].str.replace('%', '').astype(float)
+    
+        #Filter the rows where the confidence level is above 80
+        df_filtered = df[df['Confidence'] > 80]   
+    
+    
+    #changes column name to time
+    df = df_filtered.rename(columns = {'Unnamed: 0': 'Time' })
+    
+    
+    #Just converts the dataframe to html to make it easier to read in email
+    html_table = df_filtered.to_html()
+    
+    email_auto(html_table, f'over {num} goals')
