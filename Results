@@ -1,0 +1,20 @@
+def fulltime():
+    df = dfFromURL("https://talkfootball.co.uk/predictions/fulltime-1X2/",2)
+    
+    #Drop over and under % columns since confidence column covers that anyway
+    #df = my_df.drop(['Under (%)', 'Over (%)'], axis=1)
+    
+    #changes column name to time
+    df = df.rename(columns = {'Unnamed: 0': 'Time' })
+    
+    #converts confidence column values to floats
+    df['Confidence'] = df['Confidence'].str.replace('%', '').astype(float)
+    
+    #Filter the rows where the confidence level is above 70
+    df_filtered = df[df['Confidence'] > 70]
+    
+    #Just converts the dataframe to html to make it easier to read in email
+    html_table = df_filtered.to_html()
+    
+    email_auto(html_table, "Fulltime")
+    
